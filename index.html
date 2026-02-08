@@ -58,3 +58,225 @@
 
   textarea{
     width:100%; height:90px; border-radius:12px; border:1px solid #2c2c3f;
+    padding:10px 12px; margin-top:14px; resize:none; font-size:14px; background:#181824; color:var(--ink);
+  }
+  .page{ display:none } .page.active{ display:block }
+
+  /* Image + text row (wish section) */
+  .row{ display:flex; gap:14px; align-items:flex-start; text-align:left; flex-wrap:wrap }
+  img.hero{ width:168px; max-width:100%; height:auto; border-radius:18px; display:block; flex:0 0 auto }
+  .type{
+    flex:1 1 180px; min-width:0; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word;
+    line-height:1.5; color:var(--ink);
+  }
+
+  /* Countdown (currently hidden text; kept for future lock) */
+  #countdown{ font:700 18px/1.2 'Poppins',system-ui; margin:8px 0 0; color:#e7dbff }
+
+  /* Floating emojis */
+  .float-layer{ position:fixed; inset:0; pointer-events:none; z-index:2 }
+  .emoji{
+    position:absolute; bottom:-10vh; font-size:30px; opacity:.9;
+    animation:floatUp 2.4s linear forwards; text-shadow:0 4px 18px rgba(255,255,255,.15);
+  }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) translateX(0) rotate(0); opacity:.95 }
+    100%{ transform:translateY(-115vh) translateX(30px) rotate(360deg); opacity:0 }
+  }
+
+  /* Confetti */
+  #confetti{ position:fixed; inset:0; pointer-events:none; z-index:2 }
+
+  /* Music button */
+  #musicBtn{
+    position:fixed; right:18px; bottom:18px; z-index:9999;
+    padding:10px 14px; border:none; border-radius:999px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color:#fff; font-weight:700; box-shadow:0 10px 26px rgba(123,92,255,.45);
+  }
+
+  /* Small screens stack */
+  @media (max-width:420px){
+    .row{ flex-direction:column; align-items:center; text-align:left }
+    .type{ width:100% }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background music (loops softly). Replace with music.mp3 if you upload one -->
+<audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7d0c4c2a1c.mp3?filename=romantic-background-110857.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Special performance (plays after final Send). Upload your file as my-performance.mp3 -->
+<audio id="special">
+  <source src="my-performance.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn">▶️ Play music</button>
+<canvas id="confetti"></canvas>
+<div class="float-layer" id="floatLayer"></div>
+
+<div class="container">
+
+  <!-- PAGE 1 -->
+  <div id="page1" class="page active">
+    <h2>Hello My Buchu Yene fikir 💕</h2>
+    <p>I made something special for you.</p>
+
+    <!-- We’ll keep countdown node for later (we’ll enable the lock after you test) -->
+    <div id="countdown" style="display:none"></div>
+
+    <button id="startBtn" class="btn" onclick="startExperience()">Click Me</button>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div id="page2" class="page">
+    <p><b>Before we go to the surprise, please send your love to Dagu 💌</b></p>
+    <textarea id="loveMessage" placeholder="Type from your heart..."></textarea>
+    <button class="btn" onclick="submitLove()">Send</button>
+    <button class="btn btn-secondary" onclick="prevPage(1)">Back</button>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div id="page3" class="page">
+    <h2>Eweshh, thank you my love ❤️</h2>
+    <button class="btn" onclick="toSurprise()">Birthday Surprise</button>
+  </div>
+
+  <!-- PAGE 4 -->
+  <div id="page4" class="page">
+    <div class="row">
+      <img class="hero" src="https://i.postimg.cc/xdNXrg2J/Love-birds.png" alt="Us" />
+      <div class="type" id="letter"></div>
+    </div>
+
+    <div style="margin-top:18px">
+      <p><b>Anything you want to say to me? 💕</b></p>
+      <textarea id="afterSurpriseMessage" placeholder="Write me something cute..."></textarea>
+      <button class="btn" onclick="handleFinalMessage()">Send Message</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== Navigation helpers ===== */
+function nextPage(n){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page'+n).classList.add('active');
+}
+function prevPage(n){ nextPage(n); }
+
+/* ===== Music controls (mobile-friendly) ===== */
+const bgm = document.getElementById('bgm');
+const special = document.getElementById('special');
+const musicBtn = document.getElementById('musicBtn');
+
+function updateMusicBtn(){
+  const anyPlaying = !bgm.paused || !special.paused;
+  musicBtn.textContent = anyPlaying ? '⏸ Pause music' : '▶️ Play music';
+}
+async function tryPlay(el){ try { await el.play(); } catch(e){} }
+function gentleEnable(){ tryPlay(bgm); updateMusicBtn(); }
+['click','touchstart','keydown','scroll'].forEach(evt =>
+  window.addEventListener(evt, gentleEnable, { once:true })
+);
+musicBtn.addEventListener('click', ()=>{
+  const anyPlaying = !bgm.paused || !special.paused;
+  if (anyPlaying){ bgm.pause(); special.pause(); }
+  else { tryPlay(bgm); }
+  updateMusicBtn();
+});
+
+/* ===== Flow ===== */
+/* NOTE: At your request, there is NO time lock now. You can test freely. */
+function startExperience(){
+  tryPlay(bgm);
+  nextPage(2);
+}
+function submitLove(){
+  const msg = document.getElementById('loveMessage').value.trim();
+  if (!msg) return alert('Please write something meaningful 😊');
+  localStorage.setItem('loveMessage', msg);
+  nextPage(3);
+}
+function toSurprise(){
+  confettiBurst();
+  nextPage(4);
+  typeLetter();
+}
+function handleFinalMessage(){
+  const msg = document.getElementById('afterSurpriseMessage').value.trim();
+  if (!msg) return alert('Write something 😊');
+  localStorage.setItem('finalMessage', msg);
+
+  // Pause background and play your performance
+  bgm.pause();
+  tryPlay(special);
+  updateMusicBtn();
+
+  showLoveEmojis(30);
+}
+
+/* ===== Letter (typewriter) ===== */
+const letterText = `Happy Birthday, my love. You are truly one of the greatest blessings in my life.
+Knowing you has filled my heart with warmth, happiness, and peace.
+Your smile makes my world brighter and your love makes my life meaningful.
+
+I pray your life is filled with endless joy and success.
+I love you deeply, today and always ❤️
+I will invite you the kitfo you love when you come back 😍
+
+KISSESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+`;
+function typeLetter(){
+  const box = document.getElementById('letter');
+  box.textContent = '';
+  let i = 0;
+  (function step(){
+    box.textContent = letterText.slice(0, i++);
+    if (i <= letterText.length) setTimeout(step, 28);
+  })();
+}
+
+/* ===== Emojis & Confetti ===== */
+const floatLayer = document.getElementById('floatLayer');
+function showLoveEmojis(count=24){
+  const icons = ['❤️','💕','💖','💘','💞','✨','🌸','⭐'];
+  for (let i=0;i<count;i++){
+    const e = document.createElement('div');
+    e.className = 'emoji';
+    e.textContent = icons[Math.floor(Math.random()*icons.length)];
+    e.style.left = (Math.random()*100) + 'vw';
+    e.style.fontSize = (14 + Math.random()*28) + 'px';
+    e.style.animationDuration = (1.8 + Math.random()*1.2) + 's';
+    floatLayer.appendChild(e);
+    setTimeout(()=>e.remove(), 2600);
+  }
+}
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+addEventListener('resize', resize); resize();
+let conf=[];
+function confettiBurst(){
+  conf = [...Array(160)].map(()=>({
+    x: canvas.width/2, y: canvas.height/2,
+    vx:(Math.random()-0.5)*10, vy:(Math.random()-1.2)*10,
+    s:3+Math.random()*5, color:`hsl(${Math.random()*360},90%,60%)`,
+    life:80+Math.random()*40
+  }));
+}
+(function loop(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  conf.forEach(p=>{
+    p.vy += 0.12; p.x += p.vx; p.y += p.vy; p.life--;
+    ctx.fillStyle=p.color; ctx.fillRect(p.x,p.y,p.s,p.s);
+  });
+  conf = conf.filter(p=>p.life>0);
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
