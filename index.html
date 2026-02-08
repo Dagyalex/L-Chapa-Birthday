@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>My L‑CHAPA (Buchuyeee)</title>
 
-<meta name="theme-color" content="#ff6fa8">
+<meta name="theme-color" content="#7b5cff">
 <meta name="description" content="A little birthday surprise made with love. 💖">
 
-<!-- Optional share image: add cover.jpg to repo and uncomment -->
+<!-- (Optional) Social card image if you add one -->
 <!-- <meta property="og:image" content="cover.jpg"> -->
 
-<!-- (Optional) Font -->
+<!-- Nice readable font -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 
 <style>
   :root {
     --bg:#0b0b10; --card:#12121a; --ink:#f5f6fb; --soft:#c9cadd;
-    --accent:#ff6fa8; --accent-2:#6a8cff;
+    --accent:#7b5cff;            /* main purple */
+    --accent-2:#9d7bff;          /* lighter purple for gradients */
   }
   * { box-sizing:border-box }
   html,body { height:100% }
@@ -27,283 +28,33 @@
     color:var(--ink); display:grid; place-items:center; overflow:hidden; text-align:center;
   }
   .container{
-    position:relative; z-index:3; background:var(--card); padding:28px 22px; border-radius:22px;
+    position:relative; z-index:3; background:var(--card);
+    padding:28px 22px; border-radius:22px;
     box-shadow:0 12px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.04);
     width:380px; max-width:92vw; transition:transform .6s ease;
   }
   h2{ margin:10px 0 8px; font-size:22px }
   p{ color:var(--soft); line-height:1.5; margin:8px 0 0 }
+
+  /* 💜 Purple buttons */
   .btn{
     padding:12px 18px; font-size:16px; border:none; border-radius:14px;
-    background:var(--accent); color:#fff; cursor:pointer; margin-top:12px;
-    box-shadow:0 10px 26px rgba(255,111,168,.35);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color:#fff; cursor:pointer; margin-top:12px;
+    box-shadow:0 10px 26px rgba(123,92,255,.45);
+    transition: transform .15s ease, filter .2s ease;
   }
-  .btn:disabled { opacity:.5; cursor:not-allowed; box-shadow:none }
-  .btn-secondary{ background:#26263a; color:var(--ink); box-shadow:none }
+  .btn:hover{ filter:brightness(1.08) }
+  .btn:active{ transform: translateY(1px) scale(.99) }
+  .btn:disabled{ opacity:.45; cursor:not-allowed; box-shadow:none }
+
+  /* Secondary (Back) button */
+  .btn-secondary{
+    background: rgba(123,92,255,.15);
+    color:#dcd2ff;
+    border:1px solid rgba(123,92,255,.35);
+    box-shadow:none;
+  }
 
   textarea{
     width:100%; height:90px; border-radius:12px; border:1px solid #2c2c3f;
-    padding:10px 12px; margin-top:14px; resize:none; font-size:14px; background:#181824; color:var(--ink);
-  }
-  .page{ display:none } .page.active{ display:block }
-
-  /* Image + text row */
-  .row{ display:flex; gap:14px; align-items:flex-start; text-align:left; flex-wrap:wrap }
-  img.hero{ width:168px; max-width:100%; height:auto; border-radius:18px; display:block; flex:0 0 auto }
-  .type{
-    flex:1 1 180px; min-width:0; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word;
-    line-height:1.5; color:var(--ink);
-  }
-
-  /* Countdown */
-  #countdown{ font:700 18px/1.2 'Poppins',system-ui; margin:8px 0 0; color:#ffe2ec }
-
-  /* Floating emojis */
-  .float-layer{ position:fixed; inset:0; pointer-events:none; z-index:2 }
-  .emoji{
-    position:absolute; bottom:-10vh; font-size:30px; opacity:.9;
-    animation:floatUp 2.4s linear forwards; text-shadow:0 4px 18px rgba(255,255,255,.15);
-  }
-  @keyframes floatUp{
-    0%{ transform:translateY(0) translateX(0) rotate(0); opacity:.95 }
-    100%{ transform:translateY(-115vh) translateX(30px) rotate(360deg); opacity:0 }
-  }
-
-  /* Confetti */
-  #confetti{ position:fixed; inset:0; pointer-events:none; z-index:2 }
-
-  /* Music button */
-  #musicBtn{
-    position:fixed; right:18px; bottom:18px; z-index:9999; padding:10px 14px; border:none; border-radius:999px;
-    background:var(--accent); color:#fff; font-weight:700; box-shadow:0 10px 26px rgba(255,111,168,.35);
-  }
-
-  /* Stack vertically on small screens */
-  @media (max-width:420px){
-    .row{ flex-direction:column; align-items:center; text-align:left }
-    .type{ width:100% }
-  }
-</style>
-</head>
-<body>
-
-<!-- Background music (loops softly) -->
-<audio id="bgm" loop>
-  <!-- Replace with your file if you upload it: <source src="music.mp3" type="audio/mpeg" /> -->
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7d0c4c2a1c.mp3?filename=romantic-background-110857.mp3" type="audio/mpeg" />
-</audio>
-
-<!-- Special performance music (plays after final Send) -->
-<audio id="special">
-  <!-- 🔔 Upload your performance as my-performance.mp3 to the repo and keep this path -->
-  <source src="my-performance.mp3" type="audio/mpeg" />
-</audio>
-
-<button id="musicBtn">▶️ Play music</button>
-<canvas id="confetti"></canvas>
-<div class="float-layer" id="floatLayer"></div>
-
-<div class="container">
-
-  <!-- PAGE 1 -->
-  <div id="page1" class="page active">
-    <h2>Hello My Buchu Yene fikir 💕</h2>
-    <p>I made something special for you.</p>
-
-    <!-- Live countdown until unlock -->
-    <div id="countdown"></div>
-
-    <button id="startBtn" class="btn" onclick="startExperience()">Click Me</button>
-  </div>
-
-  <!-- PAGE 2 -->
-  <div id="page2" class="page">
-    <p><b>Before we go to the surprise, please send your love to Dagu 💌</b></p>
-    <textarea id="loveMessage" placeholder="Type from your heart..."></textarea>
-    <button class="btn" onclick="submitLove()">Send</button>
-    <button class="btn btn-secondary" onclick="prevPage(1)">Back</button>
-  </div>
-
-  <!-- PAGE 3 -->
-  <div id="page3" class="page">
-    <h2>Eweshh, thank you my love ❤️</h2>
-    <button class="btn" onclick="toSurprise()">Birthday Surprise</button>
-  </div>
-
-  <!-- PAGE 4 -->
-  <div id="page4" class="page">
-    <div class="row">
-      <img class="hero" src="https://i.postimg.cc/xdNXrg2J/Love-birds.png" alt="Us">
-      <div class="type" id="letter"></div>
-    </div>
-
-    <div style="margin-top:18px">
-      <p><b>Anything you want to say to me? 💕</b></p>
-      <textarea id="afterSurpriseMessage" placeholder="Write me something cute..."></textarea>
-      <button class="btn" onclick="handleFinalMessage()">Send Message</button>
-    </div>
-  </div>
-</div>
-
-<script>
-/* ===== Timing: unlock exactly on Feb 12, 6:00 AM (local time) =====
-   This uses your visitor's local clock. If you're in Addis Ababa (UTC+3)
-   building the site for someone also in the same zone, this will align. */
-const unlockAt = new Date('2026-02-12T06:00:00'); // <-- Feb 12, 6:00 AM local time
-const countdownEl = document.getElementById('countdown');
-const startBtn = document.getElementById('startBtn');
-
-function updateCountdown(){
-  const now = new Date();
-  let diff = unlockAt - now;
-  if (isNaN(unlockAt.getTime())) { // safety
-    countdownEl.textContent = '';
-    startBtn.disabled = false;
-    return;
-  }
-  if (diff <= 0){
-    countdownEl.textContent = '🎉 It’s time!';
-    startBtn.disabled = false;
-    confettiBurst();
-    return;
-  }
-  startBtn.disabled = true;
-  const d = Math.floor(diff/86400000); diff %= 86400000;
-  const h = Math.floor(diff/3600000);  diff %= 3600000;
-  const m = Math.floor(diff/60000);    diff %= 60000;
-  const s = Math.floor(diff/1000);
-  countdownEl.textContent = `⏳ ${d}d ${h}h ${m}m ${s}s`;
-}
-updateCountdown();
-const cdTimer = setInterval(()=>{
-  updateCountdown();
-  if (startBtn && !startBtn.disabled) clearInterval(cdTimer);
-}, 1000);
-
-/* ===== Navigation helpers ===== */
-function nextPage(n){
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page'+n).classList.add('active');
-}
-function prevPage(n){ nextPage(n); }
-
-/* ===== Music controls (mobile-friendly) ===== */
-const bgm = document.getElementById('bgm');
-const special = document.getElementById('special');
-const musicBtn = document.getElementById('musicBtn');
-
-function updateMusicBtn(){
-  const anyPlaying = !bgm.paused || !special.paused;
-  musicBtn.textContent = anyPlaying ? '⏸ Pause music' : '▶️ Play music';
-}
-async function tryPlay(el){ try { await el.play(); } catch(e){} }
-function gentleEnable(){
-  // Prepare audio on first user interaction
-  tryPlay(bgm);
-  updateMusicBtn();
-}
-['click','touchstart','keydown','scroll'].forEach(evt =>
-  window.addEventListener(evt, gentleEnable, { once:true })
-);
-
-musicBtn.addEventListener('click', ()=>{
-  const anyPlaying = !bgm.paused || !special.paused;
-  if (anyPlaying){ bgm.pause(); special.pause(); } else { tryPlay(bgm); }
-  updateMusicBtn();
-});
-
-/* ===== Flow ===== */
-function startExperience(){
-  // Enforce time lock
-  if (new Date() < unlockAt){
-    alert('The surprise unlocks at 6:00 AM on February 12 💗');
-    return;
-  }
-  tryPlay(bgm);
-  nextPage(2);
-}
-function submitLove(){
-  const msg = document.getElementById('loveMessage').value.trim();
-  if (!msg) return alert('Please write something meaningful 😊');
-  localStorage.setItem('loveMessage', msg);
-  nextPage(3);
-}
-function toSurprise(){
-  confettiBurst();
-  nextPage(4);
-  typeLetter();
-}
-function handleFinalMessage(){
-  const msg = document.getElementById('afterSurpriseMessage').value.trim();
-  if (!msg) return alert('Write something 😊');
-  localStorage.setItem('finalMessage', msg);
-
-  // 🔔 Play your performance immediately when he sends
-  bgm.pause();
-  tryPlay(special);
-  updateMusicBtn();
-
-  showLoveEmojis(30);
-}
-
-/* ===== Letter typing ===== */
-const letterText = `Happy Birthday, my love. You are truly one of the greatest blessings in my life.
-Knowing you has filled my heart with warmth, happiness, and peace.
-Your smile makes my world brighter and your love makes my life meaningful.
-
-I pray your life is filled with endless joy and success.
-I love you deeply, today and always ❤️
-I will invite you the kitfo you love when you come back 😍
-
-KISSESS
-`;
-function typeLetter(){
-  const box = document.getElementById('letter');
-  box.textContent = '';
-  let i = 0;
-  (function step(){
-    box.textContent = letterText.slice(0, i++);
-    if (i <= letterText.length) setTimeout(step, 28);
-  })();
-}
-
-/* ===== Emojis & Confetti ===== */
-const floatLayer = document.getElementById('floatLayer');
-function showLoveEmojis(count=24){
-  const icons = ['❤️','💕','💖','💘','💞','✨','🌸','⭐'];
-  for (let i=0;i<count;i++){
-    const e = document.createElement('div');
-    e.className = 'emoji';
-    e.textContent = icons[Math.floor(Math.random()*icons.length)];
-    e.style.left = (Math.random()*100) + 'vw';
-    e.style.fontSize = (14 + Math.random()*28) + 'px';
-    e.style.animationDuration = (1.8 + Math.random()*1.2) + 's';
-    floatLayer.appendChild(e);
-    setTimeout(()=>e.remove(), 2600);
-  }
-}
-const canvas = document.getElementById('confetti');
-const ctx = canvas.getContext('2d');
-function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
-addEventListener('resize', resize); resize();
-let conf=[];
-function confettiBurst(){
-  conf = [...Array(160)].map(()=>({
-    x: canvas.width/2, y: canvas.height/2,
-    vx:(Math.random()-0.5)*10, vy:(Math.random()-1.2)*10,
-    s:3+Math.random()*5, color:`hsl(${Math.random()*360},90%,60%)`,
-    life:80+Math.random()*40
-  }));
-}
-(function loop(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  conf.forEach(p=>{
-    p.vy += 0.12; p.x += p.vx; p.y += p.vy; p.life--;
-    ctx.fillStyle=p.color; ctx.fillRect(p.x,p.y,p.s,p.s);
-  });
-  conf = conf.filter(p=>p.life>0);
-  requestAnimationFrame(loop);
-})();
-</script>
-</body>
-</html>
