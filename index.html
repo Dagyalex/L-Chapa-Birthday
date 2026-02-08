@@ -1,189 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My L-CHAPA (Buchuyeee)</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My L‑CHAPA (Buchuyeee)</title>
+
+<!-- Share card polish -->
+<meta name="theme-color" content="#ff6fa8">
+<meta name="description" content="A little birthday surprise made with love. 💖">
+<meta property="og:title" content="For My Buchu 💕">
+<meta property="og:description" content="Open this when the clock strikes 12.">
+<!-- Optional image for social preview: add cover.jpg to the repo and uncomment -->
+<!-- <meta property="og:image" content="cover.jpg"> -->
+
+<!-- Google font (optional, looks nice) -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: black;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        text-align: center;
-        overflow: hidden;
-    }
+  :root {
+    --bg:#0b0b10;
+    --card:#12121a;
+    --ink:#f5f6fb;
+    --soft:#c9cadd;
+    --accent:#ff6fa8;
+    --accent-2:#6a8cff;
+    --glow: 0 10px 30px rgba(255, 111, 168, .25);
+  }
 
-    .container {
-        background: #111;
-        padding: 30px;
-        border-radius: 20px;
-        box-shadow: 0 10px 25px rgba(255,255,255,0.1);
-        width: 340px;
-    }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: radial-gradient(1200px 600px at 80% -20%, #1a1420 0%, transparent 60%) var(--bg);
+    color: var(--ink);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    overflow: hidden;
+  }
 
-    button {
-        padding: 12px 20px;
-        font-size: 16px;
-        border: none;
-        border-radius: 12px;
-        background: #ff4b5c;
-        color: white;
-        cursor: pointer;
-        margin-top: 10px;
-    }
+  .container {
+    position: relative;
+    z-index: 3;
+    background: var(--card);
+    padding: 28px 22px;
+    border-radius: 22px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.04);
+    width: 360px;
+    max-width: 92vw;
+    transition: transform .6s ease, box-shadow .6s ease;
+  }
+  .container:hover { transform: translateY(-2px); }
 
-    textarea {
-        width: 100%;
-        height: 80px;
-        border-radius: 10px;
-        border: 1px solid #444;
-        padding: 10px;
-        margin-top: 15px;
-        resize: none;
-        font-size: 14px;
-        background: #222;
-        color: white;
-    }
+  h1,h2 { margin: 10px 0 8px }
+  h2 { font-size: 22px; }
+  p { color: var(--soft); line-height: 1.5; margin: 8px 0 0; }
 
-    img {
-        width: 160px;
-        border-radius: 20px;
-    }
+  .btn {
+    padding: 12px 18px;
+    font-size: 16px;
+    border: none;
+    border-radius: 14px;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    margin-top: 12px;
+    box-shadow: var(--glow);
+    transition: transform .15s ease, filter .2s ease;
+  }
+  .btn:active { transform: translateY(1px) scale(.99); }
 
-    .page { display: none; }
-    .active { display: block; }
+  .btn-secondary {
+    background: #26263a;
+    color: var(--ink);
+    box-shadow: none;
+  }
 
-    .wish-layout {
-        display: flex;
-        gap: 15px;
-        align-items: center;
-        text-align: left;
-    }
+  textarea {
+    width: 100%;
+    height: 90px;
+    border-radius: 12px;
+    border: 1px solid #2c2c3f;
+    padding: 10px 12px;
+    margin-top: 14px;
+    resize: none;
+    font-size: 14px;
+    background: #181824;
+    color: var(--ink);
+    outline: none;
+  }
+  textarea::placeholder { color: #8b8ca5; }
 
-    .wish-layout p {
-        font-size: 14px;
-    }
+  img.hero {
+    width: 168px; border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
 
-    .emoji {
-        position: absolute;
-        font-size: 30px;
-        animation: floatUp 2s linear forwards;
-    }
+  .page { display: none; }
+  .page.active { display: block; }
 
-    @keyframes floatUp {
-        0% { transform: translateY(0); opacity: 1; }
-        100% { transform: translateY(-300px); opacity: 0; }
-    }
+  .row {
+    display: flex; gap: 14px; align-items: center; text-align: left;
+  }
+  .row p { font-size: 14px; }
+
+  /* Floating emoji layer */
+  .float-layer { position: fixed; inset: 0; pointer-events: none; z-index: 2; }
+  .emoji {
+    position: absolute; bottom: -10vh; font-size: 30px; opacity: .9;
+    animation: floatUp 2.4s linear forwards;
+    text-shadow: 0 4px 18px rgba(255,255,255,.15);
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) translateX(0) rotate(0); opacity: .95; }
+    100% { transform: translateY(-115vh) translateX(30px) rotate(360deg); opacity: 0; }
+  }
+
+  /* Confetti canvas */
+  #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 2; }
+
+  /* Typewriter effect */
+  .type {
+    --step:28ms;
+    white-space: pre-wrap;
+    text-align: left;
+    margin-top: 8px;
+    min-height: 120px;
+  }
+
+  /* Countdown */
+  #countdown {
+    font: 700 18px/1.2 'Poppins',system-ui;
+    margin: 8px 0 0;
+    color: #ffe2ec;
+  }
+
+  /* Music button */
+  #musicBtn {
+    position: fixed; right: 18px; bottom: 18px; z-index: 9999;
+    padding: 10px 14px; border: none; border-radius: 999px;
+    background: var(--accent); color: #fff; font-weight: 700;
+    box-shadow: 0 10px 26px rgba(255,111,168,.35);
+  }
+
+  /* Soft entrance for pages */
+  .reveal { opacity: 0; transform: translateY(10px) scale(.98); filter: blur(4px); transition: .7s ease; }
+  .reveal.show { opacity: 1; transform: none; filter: none; }
+
+  /* Subtle gradient orbs background */
+  .orbs::before,
+  .orbs::after {
+    content: ""; position: fixed; border-radius: 50%;
+    filter: blur(60px); opacity: .18; z-index: 1; pointer-events: none;
+  }
+  .orbs::before {
+    width: 480px; height: 480px; background: #ff6fa8; left: -120px; top: -120px;
+  }
+  .orbs::after {
+    width: 520px; height: 520px; background: #6a8cff; right: -140px; bottom: -140px;
+  }
 </style>
 </head>
-<body>
+<body class="orbs">
 
-<!-- Background Music (Chorus section) -->
-<audio id="bgMusic" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7d0c4c2a1c.mp3?filename=romantic-background-110857.mp3" type="audio/mpeg">
+<!-- Background Music -->
+<audio id="bgm" loop>
+  <!-- 🔊 Replace with your preferred track or upload music.mp3 to the repo and use: src="music.mp3" -->
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7d0c4c2a1c.mp3?filename=romantic-background-110857.mp3" type="audio/mpeg">
 </audio>
+<button id="musicBtn">▶️ Play music</button>
 
-<div class="container">
+<!-- Visual FX layers -->
+<canvas id="confetti"></canvas>
+<div class="float-layer" id="floatLayer"></div>
 
-    <!-- PAGE 1 -->
-    <div id="page1" class="page active">
-        <h2>Hello My Buchu Yene fikir 💕</h2>
-        <p>I made something special for you ❤️</p>
-        <button onclick="startExperience()">Click Me</button>
+<div class="container reveal">
+
+  <!-- PAGE 1 -->
+  <div id="page1" class="page active">
+    <h2>Hello My Buchu Yene fikir 💕</h2>
+    <p>I made something special for you.</p>
+
+    <!-- Optional countdown. Set your date below in JS (targetDate) -->
+    <div id="countdown"></div>
+
+    <button class="btn" onclick="startExperience()">Click Me</button>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div id="page2" class="page">
+    <p><b>Before we go to the surprise, please send your love to Dagu 💌</b></p>
+    <textarea id="loveMessage" placeholder="Type from your heart..."></textarea>
+    <button class="btn" onclick="submitLove()">Send</button>
+    <button class="btn btn-secondary" onclick="prevPage(1)">Back</button>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div id="page3" class="page">
+    <h2>Eweshh, thank you my love ❤️</h2>
+    <button class="btn" onclick="toSurprise()">Birthday Surprise</button>
+  </div>
+
+  <!-- PAGE 4 -->
+  <div id="page4" class="page">
+    <div class="row" style="align-items:flex-start">
+      <!-- 🖼️ Replace with your own image link or upload Love-birds.png -->
+      <img class="hero" src="https://i.postimg.cc/xdNXrg2J/Love-birds.png" alt="Us two">
+      <div class="type" id="letter"></div>
     </div>
 
-    <!-- PAGE 2 -->
-    <div id="page2" class="page">
-        <p><b>Before we go to the surprise, please send your love to Dagu 💌</b></p>
-        <textarea id="loveMessage"></textarea>
-        <button onclick="submitLove()">Send</button>
+    <div style="margin-top:18px">
+      <p><b>Anything you want to say to me? 💕</b></p>
+      <textarea id="afterSurpriseMessage" placeholder="Write me something cute..."></textarea>
+      <button class="btn" onclick="handleFinalMessage()">Send Message</button>
     </div>
-
-    <!-- PAGE 3 -->
-    <div id="page3" class="page">
-        <h2>Eweshh Thank You My Love ❤️</h2>
-        <button onclick="nextPage(4)">Birthday Surprise</button>
-    </div>
-
-    <!-- PAGE 4 -->
-    <div id="page4" class="page">
-
-        <div class="wish-layout">
-            <img src="https://i.postimg.cc/xdNXrg2J/Love-birds.png">
-
-            <p>
-            Happy Birthday, my love. You are truly one of the greatest blessings in my life. 
-            Knowing you has filled my heart with warmth, happiness, and peace. 
-            Your smile makes my world brighter and your love makes my life meaningful. 
-            I pray your life is filled with endless joy and success. 
-            I love you deeply, today and always ❤️ I will Invite you the kitfo you love when you come back😍
-
-                KISSESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-            </p>
-        </div>
-
-        <div style="margin-top:20px;">
-            <p><b>Anything you want to say to me? 💕</b></p>
-            <textarea id="afterSurpriseMessage"></textarea>
-            <button onclick="handleFinalMessage()">Send Message</button>
-        </div>
-
-    </div>
-
+  </div>
 </div>
 
 <script>
+/* ===== Helpers ===== */
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
 
-function startExperience() {
-    document.getElementById('bgMusic').play();
-    nextPage(2);
+function nextPage(n){
+  $$(".page").forEach(p => p.classList.remove("active"));
+  const el = $("#page"+n);
+  el.classList.add("active");
+  // animate in
+  requestAnimationFrame(()=> {
+    document.querySelector('.container').classList.remove('reveal','show');
+    void document.querySelector('.container').offsetWidth;
+    document.querySelector('.container').classList.add('reveal','show');
+  });
+}
+function prevPage(n){ nextPage(n); }
+
+/* ===== Music button with mobile-friendly start ===== */
+const bgm = $("#bgm");
+const musicBtn = $("#musicBtn");
+function updateMusicBtn(){
+  musicBtn.textContent = bgm.paused ? "▶️ Play music" : "⏸ Pause music";
+}
+async function gentleStart() {
+  try { await bgm.play(); } catch(e) { /* user gesture needed */ }
+  updateMusicBtn();
+}
+musicBtn.addEventListener("click", () => {
+  if (bgm.paused) bgm.play(); else bgm.pause();
+  updateMusicBtn();
+});
+// Start after first interaction
+["click","touchstart","keydown","scroll"].forEach(evt =>
+  window.addEventListener(evt, gentleStart, { once:true })
+);
+
+/* ===== Countdown (optional) ===== */
+/* 🔔 Set the birthday date/time here (local time). 
+   If date is in the past, the countdown hides automatically. */
+const targetDate = new Date('2026-02-20T00:00:00'); // <-- CHANGE
+const cdEl = $("#countdown");
+function tickCountdown(){
+  const now = new Date();
+  let diff = targetDate - now;
+  if (isNaN(targetDate.getTime()) || diff <= 0) { cdEl.textContent = ""; return; }
+  const d = Math.floor(diff/86400000); diff %= 86400000;
+  const h = Math.floor(diff/3600000);  diff %= 3600000;
+  const m = Math.floor(diff/60000);    diff %= 60000;
+  const s = Math.floor(diff/1000);
+  cdEl.textContent = `⏳ ${d}d ${h}h ${m}m ${s}s`;
+}
+tickCountdown(); setInterval(tickCountdown, 1000);
+
+/* ===== Page flow ===== */
+function startExperience(){
+  gentleStart();
+  nextPage(2);
+}
+function submitLove(){
+  const msg = $("#loveMessage").value.trim();
+  if (!msg) return alert("Please write something meaningful 😊");
+  localStorage.setItem("loveMessage", msg);
+  nextPage(3);
+}
+function toSurprise(){
+  confettiBurst();   // 🎉 pop!
+  nextPage(4);
+  typeLetter();      // start typewriter
+}
+function handleFinalMessage(){
+  const msg = $("#afterSurpriseMessage").value.trim();
+  if (!msg) return alert("Write something 😊");
+  localStorage.setItem("finalMessage", msg);
+  showLoveEmojis(30);
 }
 
-function nextPage(pageNumber) {
-    const next = document.getElementById('page' + pageNumber);
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    next.classList.add('active');
+/* ===== Typewriter for the love letter ===== */
+const letterText = `Happy Birthday, my love. You are truly one of the greatest blessings in my life.
+Knowing you has filled my heart with warmth, happiness, and peace.
+Your smile makes my world brighter and your love makes my life meaningful.
+
+I pray your life is filled with endless joy and success.
+I love you deeply, today and always ❤️
+I will invite you the kitfo you love when you come back 😍
+
+KISSESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+`;
+let idx=0;
+function typeLetter(){
+  const el = $("#letter");
+  el.textContent = "";
+  idx = 0;
+  (function step(){
+    el.textContent = letterText.slice(0, idx++);
+    if (idx <= letterText.length) setTimeout(step, 28); // typing speed
+  })();
 }
 
-function submitLove() {
-    let msg = document.getElementById("loveMessage").value;
-
-    if(msg.trim() === "") return alert("Please write something meaningful 😊");
-
-    localStorage.setItem("loveMessage", msg);
-    nextPage(3);
+/* ===== Floating hearts/stars ===== */
+const floatLayer = $("#floatLayer");
+function showLoveEmojis(count=24){
+  const icons = ['❤️','💕','💖','💘','💞','✨','🌸','⭐'];
+  for (let i=0;i<count;i++){
+    const e = document.createElement('div');
+    e.className = 'emoji';
+    e.textContent = icons[Math.floor(Math.random()*icons.length)];
+    e.style.left = (Math.random()*100) + 'vw';
+    e.style.fontSize = (14 + Math.random()*28) + 'px';
+    e.style.animationDuration = (1.8 + Math.random()*1.2) + 's';
+    floatLayer.appendChild(e);
+    setTimeout(()=>e.remove(), 2600);
+  }
 }
 
-function handleFinalMessage() {
-    let msg = document.getElementById("afterSurpriseMessage").value;
+/* ===== Confetti (lightweight) ===== */
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+addEventListener('resize', resize); resize();
 
-    if(msg.trim() === "") return alert("Write something 😊");
-
-    localStorage.setItem("finalMessage", msg);
-
-    showLoveEmojis();
+let conf = [];
+function confettiBurst() {
+  conf = [...Array(160)].map(()=>({
+    x: canvas.width/2, y: canvas.height/2,
+    vx: (Math.random()-0.5)*10, vy: (Math.random()-1.2)*10,
+    s: 3 + Math.random()*5,
+    color: `hsl(${Math.random()*360},90%,60%)`,
+    life: 80 + Math.random()*40
+  }));
 }
+(function loop(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  conf.forEach(p=>{
+    p.vy += 0.12; p.x += p.vx; p.y += p.vy; p.life--;
+    ctx.fillStyle = p.color; ctx.fillRect(p.x,p.y,p.s,p.s);
+  });
+  conf = conf.filter(p=>p.life>0);
+  requestAnimationFrame(loop);
+})();
 
-function showLoveEmojis() {
-    const emojis = ['❤️','💕','💖','💘','💞'];
-
-    for (let i = 0; i < 25; i++) {
-        const e = document.createElement('div');
-        e.classList.add('emoji');
-        e.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-        e.style.left = Math.random() * window.innerWidth + 'px';
-        e.style.bottom = '0px';
-        document.body.appendChild(e);
-        setTimeout(() => e.remove(), 2000);
-    }
-}
-
+/* ===== Reveal-on-load ===== */
+window.addEventListener('load', ()=>{
+  document.querySelector('.container').classList.add('show');
+});
 </script>
-
 </body>
 </html>
