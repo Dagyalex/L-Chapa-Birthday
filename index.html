@@ -8,11 +8,12 @@
 <meta name="theme-color" content="#7b5cff">
 <meta name="description" content="A little birthday surprise made with love. 💖">
 
-<!-- (Optional) Social card image if you add one -->
+<!-- Optional social image if you upload one (e.g., cover.jpg) -->
 <!-- <meta property="og:image" content="cover.jpg"> -->
 
 <!-- Nice readable font -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -20,27 +21,53 @@
     --accent:#7b5cff;            /* main purple */
     --accent-2:#9d7bff;          /* lighter purple for gradients */
   }
-  * { box-sizing:border-box }
-  html,body { height:100% }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+
   body{
-    margin:0; font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    margin:0;
+    font-family:'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     background: radial-gradient(1200px 600px at 80% -20%, #1a1420 0%, transparent 60%) var(--bg);
-    color:var(--ink); display:grid; place-items:center; overflow:hidden; text-align:center;
+    color:var(--ink);
+
+    /* ✅ allow scrolling */
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    text-align:center;
   }
+
   .container{
-    position:relative; z-index:3; background:var(--card);
-    padding:28px 22px; border-radius:22px;
+    position:relative;
+    z-index:3;
+    background:var(--card);
+    padding:28px 22px;
+    border-radius:22px;
     box-shadow:0 12px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.04);
-    width:380px; max-width:92vw; transition:transform .6s ease;
+    width:380px;
+    max-width:92vw;
+
+    /* ✅ give room so you can scroll to bottom content */
+    margin:32px 0 88px; /* bottom gap so fixed music button doesn't cover last button */
   }
+
   h2{ margin:10px 0 8px; font-size:22px }
   p{ color:var(--soft); line-height:1.5; margin:8px 0 0 }
 
   /* 💜 Purple buttons */
   .btn{
-    padding:12px 18px; font-size:16px; border:none; border-radius:14px;
+    padding:12px 18px;
+    font-size:16px;
+    border:none;
+    border-radius:14px;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color:#fff; cursor:pointer; margin-top:12px;
+    color:#fff;
+    cursor:pointer;
+    margin-top:12px;
     box-shadow:0 10px 26px rgba(123,92,255,.45);
     transition: transform .15s ease, filter .2s ease;
   }
@@ -48,7 +75,7 @@
   .btn:active{ transform: translateY(1px) scale(.99) }
   .btn:disabled{ opacity:.45; cursor:not-allowed; box-shadow:none }
 
-  /* Secondary (Back) button */
+  /* Secondary (Back) */
   .btn-secondary{
     background: rgba(123,92,255,.15);
     color:#dcd2ff;
@@ -57,20 +84,48 @@
   }
 
   textarea{
-    width:100%; height:90px; border-radius:12px; border:1px solid #2c2c3f;
-    padding:10px 12px; margin-top:14px; resize:none; font-size:14px; background:#181824; color:var(--ink);
+    width:100%;
+    height:90px;
+    border-radius:12px;
+    border:1px solid #2c2c3f;
+    padding:10px 12px;
+    margin-top:14px;
+    resize:none;
+    font-size:14px;
+    background:#181824;
+    color:var(--ink);
   }
-  .page{ display:none } .page.active{ display:block }
+  .page{ display:none }
+  .page.active{ display:block }
 
-  /* Image + text row (wish section) */
-  .row{ display:flex; gap:14px; align-items:flex-start; text-align:left; flex-wrap:wrap }
-  img.hero{ width:168px; max-width:100%; height:auto; border-radius:18px; display:block; flex:0 0 auto }
+  /* Wish section layout */
+  .row{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    text-align:left;
+    flex-wrap:wrap;            /* wrap on small widths */
+  }
+  img.hero{
+    width:168px;
+    max-width:100%;
+    height:auto;
+    border-radius:18px;
+    display:block;
+    flex:0 0 auto;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+  }
   .type{
-    flex:1 1 180px; min-width:0; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word;
-    line-height:1.5; color:var(--ink);
+    flex:1 1 180px;            /* take remaining space, can wrap */
+    min-width:0;               /* prevents overflow in flex */
+    white-space:pre-wrap;      /* keep your intended line breaks */
+    overflow-wrap:anywhere;    /* break very long words */
+    word-break:break-word;     /* fallback */
+    line-height:1.5;
+    color:var(--ink);
   }
 
-  /* Countdown (currently hidden text; kept for future lock) */
+  /* Countdown (kept for future lock; currently hidden) */
   #countdown{ font:700 18px/1.2 'Poppins',system-ui; margin:8px 0 0; color:#e7dbff }
 
   /* Floating emojis */
@@ -84,18 +139,21 @@
     100%{ transform:translateY(-115vh) translateX(30px) rotate(360deg); opacity:0 }
   }
 
-  /* Confetti */
+  /* Confetti canvas */
   #confetti{ position:fixed; inset:0; pointer-events:none; z-index:2 }
 
-  /* Music button */
+  /* Music button (purple) */
   #musicBtn{
-    position:fixed; right:18px; bottom:18px; z-index:9999;
-    padding:10px 14px; border:none; border-radius:999px;
+    position:fixed;
+    right:18px; bottom:18px; z-index:9999;
+    padding:10px 14px;
+    border:none; border-radius:999px;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color:#fff; font-weight:700; box-shadow:0 10px 26px rgba(123,92,255,.45);
+    color:#fff; font-weight:700;
+    box-shadow:0 10px 26px rgba(123,92,255,.45);
   }
 
-  /* Small screens stack */
+  /* Mobile: stack */
   @media (max-width:420px){
     .row{ flex-direction:column; align-items:center; text-align:left }
     .type{ width:100% }
@@ -125,7 +183,7 @@
     <h2>Hello My Buchu Yene fikir 💕</h2>
     <p>I made something special for you.</p>
 
-    <!-- We’ll keep countdown node for later (we’ll enable the lock after you test) -->
+    <!-- kept for future locking; hidden during testing -->
     <div id="countdown" style="display:none"></div>
 
     <button id="startBtn" class="btn" onclick="startExperience()">Click Me</button>
@@ -148,7 +206,7 @@
   <!-- PAGE 4 -->
   <div id="page4" class="page">
     <div class="row">
-      <img class="hero" src="https://i.postimg.cc/xdNXrg2J/Love-birds.png" alt="Us" />
+      <img class="hero" src="https://i.postimg.cc/xdNXrg2J/Love-birds.png" alt="Us">
       <div class="type" id="letter"></div>
     </div>
 
@@ -161,14 +219,17 @@
 </div>
 
 <script>
-/* ===== Navigation helpers ===== */
+/* ===== Basic navigation ===== */
 function nextPage(n){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page'+n).classList.add('active');
+
+  /* Scroll to top of the card when switching pages (good UX on mobile) */
+  document.querySelector('.container').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function prevPage(n){ nextPage(n); }
 
-/* ===== Music controls (mobile-friendly) ===== */
+/* ===== Music controls (mobile‑friendly) ===== */
 const bgm = document.getElementById('bgm');
 const special = document.getElementById('special');
 const musicBtn = document.getElementById('musicBtn');
@@ -189,8 +250,7 @@ musicBtn.addEventListener('click', ()=>{
   updateMusicBtn();
 });
 
-/* ===== Flow ===== */
-/* NOTE: At your request, there is NO time lock now. You can test freely. */
+/* ===== Flow (no time lock for testing) ===== */
 function startExperience(){
   tryPlay(bgm);
   nextPage(2);
@@ -228,7 +288,7 @@ I pray your life is filled with endless joy and success.
 I love you deeply, today and always ❤️
 I will invite you the kitfo you love when you come back 😍
 
-KISSESS
+KISSESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 `;
 function typeLetter(){
   const box = document.getElementById('letter');
@@ -255,6 +315,7 @@ function showLoveEmojis(count=24){
     setTimeout(()=>e.remove(), 2600);
   }
 }
+
 const canvas = document.getElementById('confetti');
 const ctx = canvas.getContext('2d');
 function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
