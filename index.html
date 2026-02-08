@@ -4,207 +4,77 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>L‑CHAPA </title>
-
 <meta name="theme-color" content="#7b5cff">
 <meta name="description" content="A little birthday surprise made with love. 💖">
-
-<!-- Nice readable font -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-  :root {
-    --bg:#0b0b10; --card:#12121a; --ink:#f5f6fb; --soft:#c9cadd;
-    --accent:#7b5cff;            /* main purple */
-    --accent-2:#9d7bff;          /* lighter purple for gradients */
-  }
-
-  * { box-sizing: border-box; }
-  html, body { height: 100%; }
-
-  body{
-    margin:0;
-    font-family:'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    background: radial-gradient(1200px 600px at 80% -20%, #1a1420 0%, transparent 60%) var(--bg);
-    color:var(--ink);
-
-    /* allow scrolling */
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    overflow-y:auto;
-    overflow-x:hidden;
-
-    text-align:center;
-  }
-
-  .container{
-    position:relative;
-    z-index:3;
-    background:var(--card);
-    padding:28px 22px;
-    border-radius:22px;
-    box-shadow:0 12px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.04);
-    width:380px;
-    max-width:92vw;
-    margin:32px 0 88px; /* bottom gap so fixed music button doesn't cover last button */
-  }
-
-  h2{ margin:10px 0 8px; font-size:22px }
-  p{ color:var(--soft); line-height:1.5; margin:8px 0 0 }
-
-  /* 💜 Purple buttons */
-  .btn{
-    padding:12px 18px;
-    font-size:16px;
-    border:none;
-    border-radius:14px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color:#fff;
-    cursor:pointer;
-    margin-top:12px;
-    box-shadow:0 10px 26px rgba(123,92,255,.45);
-    transition: transform .15s ease, filter .2s ease;
-  }
-  .btn:hover{ filter:brightness(1.08) }
-  .btn:active{ transform: translateY(1px) scale(.99) }
-  .btn:disabled{ opacity:.45; cursor:not-allowed; box-shadow:none }
-
-  /* Secondary (Back) */
-  .btn-secondary{
-    background: rgba(123,92,255,.15);
-    color:#dcd2ff;
-    border:1px solid rgba(123,92,255,.35);
-    box-shadow:none;
-  }
-
-  textarea{
-    width:100%;
-    height:90px;
-    border-radius:12px;
-    border:1px solid #2c2c3f;
-    padding:10px 12px;
-    margin-top:14px;
-    resize:none;
-    font-size:14px;
-    background:#181824;
-    color:var(--ink);
-  }
-  .page{ display:none }
-  .page.active{ display:block }
-
-  /* Wish section layout */
-  .row{
-    display:flex;
-    gap:14px;
-    align-items:flex-start;
-    text-align:left;
-    flex-wrap:wrap;            /* wrap on small widths */
-  }
-  img.hero{
-    width:168px;
-    max-width:100%;
-    height:auto;
-    border-radius:18px;
-    display:block;
-    flex:0 0 auto;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
-  }
-  .type{
-    flex:1 1 180px;            /* take remaining space, can wrap */
-    min-width:0;               /* prevents overflow in flex */
-    white-space:pre-wrap;      /* keep your intended line breaks */
-    overflow-wrap:anywhere;    /* break very long words */
-    word-break:break-word;     /* fallback */
-    line-height:1.5;
-    color:var(--ink);
-  }
-
-  /* Countdown (kept for later) */
-  #countdown{ font:700 18px/1.2 'Poppins',system-ui; margin:8px 0 0; color:#e7dbff }
-
-  /* Floating emojis */
-  .float-layer{ position:fixed; inset:0; pointer-events:none; z-index:2 }
-  .emoji{
-    position:absolute; bottom:-10vh; font-size:30px; opacity:.9;
-    animation:floatUp 2.4s linear forwards; text-shadow:0 4px 18px rgba(255,255,255,.15);
-  }
-  @keyframes floatUp{
-    0%{ transform:translateY(0) translateX(0) rotate(0); opacity:.95 }
-    100%{ transform:translateY(-115vh) translateX(30px) rotate(360deg); opacity:0 }
-  }
-
-  /* Confetti canvas */
-  #confetti{ position:fixed; inset:0; pointer-events:none; z-index:2 }
-
-  /* Music button (purple) */
-  #musicBtn{
-    position:fixed;
-    right:18px; bottom:18px; z-index:9999;
-    padding:10px 14px;
-    border:none; border-radius:999px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color:#fff; font-weight:700;
-    box-shadow:0 10px 26px rgba(123,92,255,.45);
-  }
-
-  /* --- Music Page styles --- */
-  .gallery{
-    margin-top:8px;
-    position:relative;
-    width:100%;
-    aspect-ratio: 4 / 5;         /* nice portrait ratio; adjust if you want */
-    overflow:hidden;
-    border-radius:18px;
-    box-shadow:0 12px 30px rgba(0,0,0,.35);
-    background:#0e0e15;
-  }
-  .gallery img{
-    position:absolute; inset:0;
-    width:100%; height:100%;
-    object-fit:cover;
-    transition: opacity .35s ease;
-    opacity:1;
-  }
-  .gallery img.fade{ opacity:0; }
-
-  .hint{ font-size:12px; color:#bdbfe6; margin-top:6px }
-
-  /* Mobile: stack */
-  @media (max-width:420px){
-    .row{ flex-direction:column; align-items:center; text-align:left }
-    .type{ width:100% }
-  }
+:root {
+  --bg:#0b0b10; --card:#12121a; --ink:#f5f6fb; --soft:#c9cadd;
+  --accent:#7b5cff; --accent-2:#9d7bff;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body{
+  margin:0; font-family:'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: radial-gradient(1200px 600px at 80% -20%, #1a1420 0%, transparent 60%) var(--bg);
+  color:var(--ink);
+  display:flex; flex-direction:column; align-items:center;
+  overflow-y:auto; overflow-x:hidden;
+  text-align:center;
+}
+.container{
+  position:relative; z-index:3; background:var(--card);
+  padding:28px 22px; border-radius:22px;
+  box-shadow:0 12px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.04);
+  width:380px; max-width:92vw; margin:32px 0 88px;
+}
+h2{ margin:10px 0 8px; font-size:22px }
+p{ color:var(--soft); line-height:1.5; margin:8px 0 0 }
+.btn{ padding:12px 18px; font-size:16px; border:none; border-radius:14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:#fff; cursor:pointer;
+  margin-top:12px; box-shadow:0 10px 26px rgba(123,92,255,.45); transition: transform .15s ease, filter .2s ease;
+}
+.btn:hover{ filter:brightness(1.08) }
+.btn:active{ transform: translateY(1px) scale(.99) }
+.btn:disabled{ opacity:.45; cursor:not-allowed; box-shadow:none }
+.btn-secondary{ background: rgba(123,92,255,.15); color:#dcd2ff; border:1px solid rgba(123,92,255,.35); box-shadow:none }
+textarea{ width:100%; height:90px; border-radius:12px; border:1px solid #2c2c3f; padding:10px 12px; margin-top:14px;
+  resize:none; font-size:14px; background:#181824; color:var(--ink); }
+.page{ display:none }
+.page.active{ display:block }
+.row{ display:flex; gap:14px; align-items:flex-start; text-align:left; flex-wrap:wrap; }
+img.hero{ width:168px; max-width:100%; height:auto; border-radius:18px; display:block; flex:0 0 auto;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.type{ flex:1 1 180px; min-width:0; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word; line-height:1.5; color:var(--ink); }
+#countdown{ font:700 18px/1.2 'Poppins',system-ui; margin:8px 0 0; color:#e7dbff }
+.float-layer{ position:fixed; inset:0; pointer-events:none; z-index:2 }
+.emoji{ position:absolute; bottom:-10vh; font-size:30px; opacity:.9; animation:floatUp 2.4s linear forwards; text-shadow:0 4px 18px rgba(255,255,255,.15); }
+@keyframes floatUp{ 0%{ transform:translateY(0) translateX(0) rotate(0); opacity:.95 } 100%{ transform:translateY(-115vh) translateX(30px) rotate(360deg); opacity:0 } }
+#confetti{ position:fixed; inset:0; pointer-events:none; z-index:2 }
+#musicBtn{ position:fixed; right:18px; bottom:18px; z-index:9999; padding:10px 14px; border:none; border-radius:999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:#fff; font-weight:700; box-shadow:0 10px 26px rgba(123,92,255,.45); }
+@media (max-width:420px){ .row{ flex-direction:column; align-items:center; text-align:left } .type{ width:100% } }
 </style>
 </head>
 <body>
 
-<!-- Background music (loops softly). Replace with music.mp3 if you upload one -->
 <audio id="bgm" loop>
   <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7d0c4c2a1c.mp3?filename=romantic-background-110857.mp3" type="audio/mpeg">
 </audio>
-
-<!-- Special performance (plays on the Music Page). Upload your file as my-performance.mp3 -->
-<audio id="special">
-  <source src="my-performance.mp3" type="audio/mpeg">
-</audio>
-
 <button id="musicBtn">▶️ Play music</button>
 <canvas id="confetti"></canvas>
 <div class="float-layer" id="floatLayer"></div>
-
 <div class="container">
 
   <!-- PAGE 1 -->
   <div id="page1" class="page active">
-    <h2>Hello My Buchu (My Purple) 💕</h2>
+    <h2>Hello My Buchu 💕</h2>
     <p>I made something special for you.</p>
-
-    <!-- kept for future locking; hidden during testing -->
-    <div id="countdown" style="display:none"></div>
-
-    <button id="startBtn" class="btn" onclick="startExperience()">Click Me</button>
+    <button class="btn" onclick="startExperience()">Click Me</button>
   </div>
 
   <!-- PAGE 2 -->
@@ -221,163 +91,75 @@
     <button class="btn" onclick="toSurprise()">Birthday Surprise</button>
   </div>
 
-  <!-- PAGE 4 (Wish + Music button) -->
+  <!-- PAGE 4 -->
   <div id="page4" class="page">
     <div class="row">
       <img class="hero" src="https://i.postimg.cc/xdNXrg2J/Love-birds.png" alt="Us together">
       <div class="type" id="letter"></div>
     </div>
-
     <div style="margin-top:18px">
-      <!-- Replaced the old textarea section with this Music Page button -->
-      <button class="btn" onclick="openMusicPage()">Open Music Page 🎵</button>
+      <button class="btn" onclick="showLoveEmojis()">Send Love 💖</button>
     </div>
   </div>
 
-  <!-- PAGE 5 (Music Page with slideshow) -->
-  <div id="page5" class="page">
-    <h2>For You, My Love 🎶</h2>
-    <div class="gallery">
-      <img id="slideTop" src="" alt="Gallery image on top" class="fade">
-      <img id="slideBottom" src="" alt="Gallery image bottom">
-    </div>
-
-    <div class="hint">Pictures will change automatically. Tap to play the performance.</div>
-
-    <button id="specialBtn" class="btn">▶️ Play Special Music</button>
-    <button class="btn btn-secondary" onclick="prevPage(4)">Back</button>
-  </div>
 </div>
 
 <script>
-/* ===== Basic navigation ===== */
+/* ===== Navigation ===== */
 function nextPage(n){
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page'+n).classList.add('active');
-  // Scroll to top of the card when switching pages (helps on mobile)
-  document.querySelector('.container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const page=document.getElementById('page'+n);
+  if(page) page.classList.add('active');
 }
 function prevPage(n){ nextPage(n); }
 
-/* ===== Music controls (mobile‑friendly) ===== */
-const bgm = document.getElementById('bgm');
-const special = document.getElementById('special');
-const musicBtn = document.getElementById('musicBtn');
+/* ===== Music ===== */
+const bgm=document.getElementById('bgm');
+const musicBtn=document.getElementById('musicBtn');
+function tryPlay(el){ try{ el.play(); }catch(e){} }
+musicBtn.addEventListener('click',()=>{ if(!bgm.paused) bgm.pause(); else tryPlay(bgm); });
 
-function updateMusicBtn(){
-  const anyPlaying = !bgm.paused || !special.paused;
-  musicBtn.textContent = anyPlaying ? '⏸ Pause music' : '▶️ Play music';
-}
-async function tryPlay(el){ try { await el.play(); } catch(e){} }
-function gentleEnable(){ tryPlay(bgm); updateMusicBtn(); }
-['click','touchstart','keydown','scroll'].forEach(evt =>
-  window.addEventListener(evt, gentleEnable, { once:true })
-);
-musicBtn.addEventListener('click', ()=>{
-  const anyPlaying = !bgm.paused || !special.paused;
-  if (anyPlaying){ bgm.pause(); special.pause(); }
-  else { tryPlay(bgm); }
-  updateMusicBtn();
-});
-
-/* ===== Flow (no time lock for testing) ===== */
-function startExperience(){
-  tryPlay(bgm);
-  nextPage(2);
-}
+/* ===== Flow ===== */
+function startExperience(){ nextPage(2); tryPlay(bgm); }
 function submitLove(){
-  const msg = document.getElementById('loveMessage').value.trim();
-  if (!msg) return alert('Please write something meaningful 😊');
+  const msg=document.getElementById('loveMessage').value.trim();
+  if(!msg) return alert('Please write something meaningful 😊');
   localStorage.setItem('loveMessage', msg);
   nextPage(3);
 }
-function toSurprise(){
-  confettiBurst();
-  nextPage(4);
-  typeLetter();
-}
+function toSurprise(){ nextPage(4); typeLetter(); confettiBurst(); }
 
-/* Replace textarea with Music Page button behavior */
-function openMusicPage(){
-  // Pause background, attempt to start performance, go to music page
-  bgm.pause();
-  nextPage(5);
-  startSlideshow();
-  tryPlay(special);
-  updateSpecialBtn();
-  updateMusicBtn();
-}
-
-/* ===== Letter (typewriter) ===== */
-const letterText = `Happy Birthday, my love. You are truly one of the greatest blessings in my life.
+/* ===== Letter ===== */
+const letterText=`Happy Birthday, my love. You are truly one of the greatest blessings in my life.
 Knowing you has filled my heart with warmth, happiness, and peace.
 Your smile makes my world brighter and your love makes my life meaningful.
 
 I pray your life is filled with endless joy and success.
-I love you deeply, today and always ❤️
-I will invite you the kitfo you love when you come back 😍
-
-KISSESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-`;
+I love you deeply, today and always ❤️`;
 function typeLetter(){
-  const box = document.getElementById('letter');
-  box.textContent = '';
-  let i = 0;
-  (function step(){
-    box.textContent = letterText.slice(0, i++);
-    if (i <= letterText.length) setTimeout(step, 28);
-  })();
+  const box=document.getElementById('letter'); box.textContent='';
+  let i=0; (function step(){ box.textContent=letterText.slice(0,i++); if(i<=letterText.length) setTimeout(step,28); })();
 }
 
 /* ===== Emojis & Confetti ===== */
-const floatLayer = document.getElementById('floatLayer');
 function showLoveEmojis(count=24){
-  const icons = ['❤️','💕','💖','💘','💞','✨','🌸','⭐'];
-  for (let i=0;i<count;i++){
-    const e = document.createElement('div');
-    e.className = 'emoji';
-    e.textContent = icons[Math.floor(Math.random()*icons.length)];
-    e.style.left = (Math.random()*100) + 'vw';
-    e.style.fontSize = (14 + Math.random()*28) + 'px';
-    e.style.animationDuration = (1.8 + Math.random()*1.2) + 's';
+  const icons=['❤️','💕','💖','💘','💞','✨','🌸','⭐'];
+  const floatLayer=document.getElementById('floatLayer');
+  for(let i=0;i<count;i++){
+    const e=document.createElement('div'); e.className='emoji'; e.textContent=icons[Math.floor(Math.random()*icons.length)];
+    e.style.left=(Math.random()*100)+'vw'; e.style.fontSize=(14+Math.random()*28)+'px';
+    e.style.animationDuration=(1.8+Math.random()*1.2)+'s';
     floatLayer.appendChild(e);
-    setTimeout(()=>e.remove(), 2600);
+    setTimeout(()=>e.remove(),2600);
   }
 }
-
-const canvas = document.getElementById('confetti');
-const ctx = canvas.getContext('2d');
+const canvas=document.getElementById('confetti'); const ctx=canvas.getContext('2d');
 function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
-addEventListener('resize', resize); resize();
+addEventListener('resize',resize); resize();
 let conf=[];
-function confettiBurst(){
-  conf = [...Array(160)].map(()=>({
-    x: canvas.width/2, y: canvas.height/2,
-    vx:(Math.random()-0.5)*10, vy:(Math.random()-1.2)*10,
-    s:3+Math.random()*5, color:`hsl(${Math.random()*360},90%,60%)`,
-    life:80+Math.random()*40
-  }));
-}
-(function loop(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  conf.forEach(p=>{
-    p.vy += 0.12; p.x += p.vx; p.y += p.vy; p.life--;
-    ctx.fillStyle=p.color; ctx.fillRect(p.x,p.y,p.s,p.s);
-  });
-  conf = conf.filter(p=>p.life>0);
-  requestAnimationFrame(loop);
-})();
+function confettiBurst(){ conf=[...Array(160)].map(()=>({x:canvas.width/2, y:canvas.height/2, vx:(Math.random()-0.5)*10, vy:(Math.random()-1.2)*10, s:3+Math.random()*5, color:`hsl(${Math.random()*360},90%,60%)`, life:80+Math.random()*40})); }
+(function loop(){ ctx.clearRect(0,0,canvas.width,canvas.height); conf.forEach(p=>{ p.vy+=0.12; p.x+=p.vx; p.y+=p.vy; p.life--; ctx.fillStyle=p.color; ctx.fillRect(p.x,p.y,p.s,p.s); }); conf=conf.filter(p=>p.life>0); requestAnimationFrame(loop); })();
+</script>
 
-/* ===== Music Page (slideshow + performance controls) ===== */
-
-/* 👉 Replace these with your own images.
-   - You can upload images into the repo (e.g., img1.jpg, img2.jpg) and use relative paths.
-   - You can also paste direct links. */
-const galleryImages = [
-  'https://i.postimg.cc/xdNXrg2J/Love-birds.png',
-  'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=1000&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1000&auto=format&fit=crop'
-];
-
-const slideTop = document.getElementById('slideTop');
+</body>
+</html>
