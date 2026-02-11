@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>L‑CHAPA </title>
 <meta name="theme-color" content="#7b5cff">
-<meta name="description" content="A little birthday surprise made with love. 💖">
+<meta name="description" content="A little surprise for ወልደ አረጋዊ 💖">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -130,12 +130,17 @@ function submitLove(){
 function toSurprise(){ nextPage(4); typeLetter(); confettiBurst(); }
 
 /* ===== Letter ===== */
-const letterText=`Happy Birthday, my love. You are truly one of the greatest blessings in my life.
+const letterText=`በዛሬዋ ቀን የካቲት ፭ ወልደ  አረጋዊ ወደዚች ምድር መጡ::
+Happy Birthday, my love. You are truly one of the greatest blessings in my life.
 Knowing you has filled my heart with warmth, happiness, and peace.
 Your smile makes my world brighter and your love makes my life meaningful.
 
 I pray your life is filled with endless joy and success.
-I love you deeply, today and always ❤️ ,I will Invite you the kitfo or the Burger you love CHOOSE WISELY`;
+I love you deeply, today and always ❤️,
+
+I will Invite you the kitfo or the Burger you love CHOOSE WISELY
+
+Your ወለተ መድህን😍`;
 function typeLetter(){
   const box=document.getElementById('letter'); box.textContent='';
   let i=0; (function step(){ box.textContent=letterText.slice(0,i++); if(i<=letterText.length) setTimeout(step,28); })();
