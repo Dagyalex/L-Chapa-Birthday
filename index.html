@@ -1,165 +1,215 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>L‑CHAPA </title>
-<meta name="theme-color" content="#7b5cff">
-<meta name="description" content="A little birthday surprise made with love. 💖">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Birthday Surprise ❤️</title>
 
 <style>
-:root {
-  --bg:#0b0b10; --card:#12121a; --ink:#f5f6fb; --soft:#c9cadd;
-  --accent:#7b5cff; --accent-2:#9d7bff;
-}
-* { box-sizing: border-box; }
-html, body { height: 100%; }
 body{
-  margin:0; font-family:'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: radial-gradient(1200px 600px at 80% -20%, #1a1420 0%, transparent 60%) var(--bg);
-  color:var(--ink);
-  display:flex; flex-direction:column; align-items:center;
-  overflow-y:auto; overflow-x:hidden;
-  text-align:center;
+background:black;
+color:white;
+font-family:Arial;
+text-align:center;
+margin:0;
+overflow-x:hidden;
 }
+
+.page{
+display:none;
+padding:40px;
+}
+
+.active{
+display:block;
+}
+
+.btn{
+background:white;
+color:black;
+padding:12px 25px;
+margin-top:20px;
+border:none;
+cursor:pointer;
+font-size:16px;
+}
+
 .container{
-  position:relative; z-index:3; background:var(--card);
-  padding:28px 22px; border-radius:22px;
-  box-shadow:0 12px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.04);
-  width:380px; max-width:92vw; margin:32px 0 88px;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:40px;
+flex-wrap:wrap;
+margin-top:30px;
 }
-h2{ margin:10px 0 8px; font-size:22px }
-p{ color:var(--soft); line-height:1.5; margin:8px 0 0 }
-.btn{ padding:12px 18px; font-size:16px; border:none; border-radius:14px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:#fff; cursor:pointer;
-  margin-top:12px; box-shadow:0 10px 26px rgba(123,92,255,.45); transition: transform .15s ease, filter .2s ease;
+
+img{
+width:300px;
+border-radius:12px;
 }
-.btn:hover{ filter:brightness(1.08) }
-.btn:active{ transform: translateY(1px) scale(.99) }
-.btn:disabled{ opacity:.45; cursor:not-allowed; box-shadow:none }
-.btn-secondary{ background: rgba(123,92,255,.15); color:#dcd2ff; border:1px solid rgba(123,92,255,.35); box-shadow:none }
-textarea{ width:100%; height:90px; border-radius:12px; border:1px solid #2c2c3f; padding:10px 12px; margin-top:14px;
-  resize:none; font-size:14px; background:#181824; color:var(--ink); }
-.page{ display:none }
-.page.active{ display:block }
-.row{ display:flex; gap:14px; align-items:flex-start; text-align:left; flex-wrap:wrap; }
-img.hero{ width:168px; max-width:100%; height:auto; border-radius:18px; display:block; flex:0 0 auto;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
+
+textarea{
+width:80%;
+height:120px;
+margin-top:20px;
+font-size:16px;
 }
-.type{ flex:1 1 180px; min-width:0; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word; line-height:1.5; color:var(--ink); }
-#countdown{ font:700 18px/1.2 'Poppins',system-ui; margin:8px 0 0; color:#e7dbff }
-.float-layer{ position:fixed; inset:0; pointer-events:none; z-index:2 }
-.emoji{ position:absolute; bottom:-10vh; font-size:30px; opacity:.9; animation:floatUp 2.4s linear forwards; text-shadow:0 4px 18px rgba(255,255,255,.15); }
-@keyframes floatUp{ 0%{ transform:translateY(0) translateX(0) rotate(0); opacity:.95 } 100%{ transform:translateY(-115vh) translateX(30px) rotate(360deg); opacity:0 } }
-#confetti{ position:fixed; inset:0; pointer-events:none; z-index:2 }
-#musicBtn{ position:fixed; right:18px; bottom:18px; z-index:9999; padding:10px 14px; border:none; border-radius:999px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:#fff; font-weight:700; box-shadow:0 10px 26px rgba(123,92,255,.45); }
-@media (max-width:420px){ .row{ flex-direction:column; align-items:center; text-align:left } .type{ width:100% } }
+
+.emoji{
+position:fixed;
+font-size:30px;
+animation:float 3s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0);}
+100%{transform:translateY(-800px);}
+}
+
+.puzzle{
+width:300px;
+margin:auto;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:3px;
+}
+
+.tile{
+width:100px;
+height:100px;
+background-size:300px 300px;
+cursor:pointer;
+}
 </style>
 </head>
+
 <body>
 
-<audio id="bgm" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7d0c4c2a1c.mp3?filename=romantic-background-110857.mp3" type="audio/mpeg">
-</audio>
-<button id="musicBtn">▶️ Play music</button>
-<canvas id="confetti"></canvas>
-<div class="float-layer" id="floatLayer"></div>
+<audio id="bgMusic" src="music.mp3"></audio>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+<h1>Hey My Love ❤️</h1>
+<button class="btn" onclick="nextPage(2)">Start</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+<h2>I have something special for you 🎁</h2>
+<button class="btn" onclick="nextPage(3)">Surprise</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+
 <div class="container">
 
-  <!-- PAGE 1 -->
-  <div id="page1" class="page active">
-    <h2>Hello My Buchu 💕</h2>
-    <p>I made something for you, as this is your Special day of the Year .</p>
-    <button class="btn" onclick="startExperience()">Click Me</button>
-  </div>
+<img src="https://drive.google.com/uc?export=view&id=1Ybfywz8BQDoOkyiBritRkvZnyeCEeSjA">
 
-  <!-- PAGE 2 -->
-  <div id="page2" class="page">
-    <p><b>Before we go to the surprise, please send your love to Dagu 💌</b></p>
-    <textarea id="loveMessage" placeholder="Type from your heart..."></textarea>
-    <button class="btn" onclick="submitLove()">Send</button>
-    <button class="btn btn-secondary" onclick="prevPage(1)">Back</button>
-  </div>
-
-  <!-- PAGE 3 -->
-  <div id="page3" class="page">
-    <h2>Owww, thank you my love ❤️</h2>
-    <button class="btn" onclick="toSurprise()">Birthday Surprise</button>
-  </div>
-
-  <!-- PAGE 4 -->
-  <div id="page4" class="page">
-    <div class="row">
-      <img class="hero" src="https://i.postimg.cc/xdNXrg2J/Love-birds.png" alt="Us together">
-      <div class="type" id="letter"></div>
-    </div>
-    <div style="margin-top:18px">
-      <button class="btn" onclick="showLoveEmojis()">Send Love 💖</button>
-    </div>
-  </div>
+<p style="max-width:400px;">
+Happy Birthday, my love ❤️  
+You are not just someone special in my life… you are my blessing, my answered prayer, and my safe place.  
+Your love fills my world with happiness, warmth, and meaning. Every moment with you feels like a beautiful gift I never want to lose.  
+I pray this year brings you endless joy, success, and peace because you truly deserve every beautiful thing life can offer.  
+I love you more than words can ever express.
+</p>
 
 </div>
 
+<button class="btn" onclick="nextPage(4)">Continue</button>
+
+</div>
+
+<!-- PAGE 4 MESSAGE BOX -->
+<div class="page" id="page4">
+
+<h2>Anything you want to say to me? 💌</h2>
+
+<textarea id="loveMessage"></textarea>
+
+<br>
+
+<button class="btn" onclick="saveMessage()">Send Love</button>
+
+</div>
+
+<!-- PAGE 5 PUZZLE -->
+<div class="page" id="page5">
+
+<h2>Play My Love Puzzle ❤️</h2>
+
+<button class="btn" onclick="playMusic()">Play Music</button>
+
+<div class="puzzle" id="puzzle"></div>
+
+</div>
+
+
 <script>
-/* ===== Navigation ===== */
-function nextPage(n){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const page=document.getElementById('page'+n);
-  if(page) page.classList.add('active');
-}
-function prevPage(n){ nextPage(n); }
 
-/* ===== Music ===== */
-const bgm=document.getElementById('bgm');
-const musicBtn=document.getElementById('musicBtn');
-function tryPlay(el){ try{ el.play(); }catch(e){} }
-musicBtn.addEventListener('click',()=>{ if(!bgm.paused) bgm.pause(); else tryPlay(bgm); });
-
-/* ===== Flow ===== */
-function startExperience(){ nextPage(2); tryPlay(bgm); }
-function submitLove(){
-  const msg=document.getElementById('loveMessage').value.trim();
-  if(!msg) return alert('Please write something meaningful 😊');
-  localStorage.setItem('loveMessage', msg);
-  nextPage(3);
-}
-function toSurprise(){ nextPage(4); typeLetter(); confettiBurst(); }
-
-/* ===== Letter ===== */
-const letterText=`Happy Birthday, my love. You are truly one of the greatest blessings in my life.
-Knowing you has filled my heart with warmth, happiness, and peace.
-Your smile makes my world brighter and your love makes my life meaningful.
-
-I pray your life is filled with endless joy and success.
-I love you deeply, today and always ❤️ ,I will Invite you the kitfo or the Burger you love when you come back
-CHOOSE WISELY`;
-function typeLetter(){
-  const box=document.getElementById('letter'); box.textContent='';
-  let i=0; (function step(){ box.textContent=letterText.slice(0,i++); if(i<=letterText.length) setTimeout(step,28); })();
+function nextPage(num){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById("page"+num).classList.add("active");
 }
 
-/* ===== Emojis & Confetti ===== */
-function showLoveEmojis(count=24){
-  const icons=['🎂','🍰','💖','🎊','💞','🍾','🎉','⭐'];
-  const floatLayer=document.getElementById('floatLayer');
-  for(let i=0;i<count;i++){
-    const e=document.createElement('div'); e.className='emoji'; e.textContent=icons[Math.floor(Math.random()*icons.length)];
-    e.style.left=(Math.random()*100)+'vw'; e.style.fontSize=(14+Math.random()*28)+'px';
-    e.style.animationDuration=(1.8+Math.random()*1.2)+'s';
-    floatLayer.appendChild(e);
-    setTimeout(()=>e.remove(),2600);
-  }
+function saveMessage(){
+let msg=document.getElementById("loveMessage").value;
+localStorage.setItem("hisMessage",msg);
+
+showLoveEmojis();
+
+setTimeout(()=>{
+nextPage(5);
+initPuzzle();
+},2500);
 }
-const canvas=document.getElementById('confetti'); const ctx=canvas.getContext('2d');
-function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
-addEventListener('resize',resize); resize();
-let conf=[];
-function confettiBurst(){ conf=[...Array(160)].map(()=>({x:canvas.width/2, y:canvas.height/2, vx:(Math.random()-0.5)*10, vy:(Math.random()-1.2)*10, s:3+Math.random()*5, color:`hsl(${Math.random()*360},90%,60%)`, life:80+Math.random()*40})); }
-(function loop(){ ctx.clearRect(0,0,canvas.width,canvas.height); conf.forEach(p=>{ p.vy+=0.12; p.x+=p.vx; p.y+=p.vy; p.life--; ctx.fillStyle=p.color; ctx.fillRect(p.x,p.y,p.s,p.s); }); conf=conf.filter(p=>p.life>0); requestAnimationFrame(loop); })();
+
+function showLoveEmojis(){
+for(let i=0;i<20;i++){
+let emoji=document.createElement("div");
+emoji.className="emoji";
+emoji.innerHTML="❤️";
+emoji.style.left=Math.random()*100+"vw";
+emoji.style.top="100vh";
+document.body.appendChild(emoji);
+
+setTimeout(()=>emoji.remove(),3000);
+}
+}
+
+function playMusic(){
+document.getElementById("bgMusic").play();
+}
+
+/* PUZZLE GAME */
+
+let image="https://drive.google.com/uc?export=view&id=1Ybfywz8BQDoOkyiBritRkvZnyeCEeSjA";
+
+function initPuzzle(){
+
+let puzzle=document.getElementById("puzzle");
+puzzle.innerHTML="";
+
+let order=[0,1,2,3,4,5,6,7,8];
+order.sort(()=>Math.random()-0.5);
+
+order.forEach(i=>{
+let tile=document.createElement("div");
+tile.className="tile";
+tile.style.backgroundImage=`url(${image})`;
+
+let x=(i%3)*100;
+let y=Math.floor(i/3)*100;
+
+tile.style.backgroundPosition=`-${x}px -${y}px`;
+
+tile.onclick=()=>{
+playMusic();
+alert("Hehe keep playing ❤️");
+};
+
+puzzle.appendChild(tile);
+});
+}
+
 </script>
 
 </body>
